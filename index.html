@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart-Tam-Sang</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Sarabun', sans-serif, Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow-y: auto;
+        }
+        .page {
+            display: none;
+            padding: 20px;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .page.active {
+            display: flex;
+        }
+        /* รูปแบบทั่วไปตามดีไซน์ต้นฉบับ */
+        .logo-circle {
+            width: 120px;
+            height: 120px;
+            background: #d9d9d9;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-weight: bold;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 14px;
+            color: #333;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="password"], textarea {
+            width: 100%;
+            padding: 12px;
+            background: #d9d9d9;
+            border: none;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #b5b5b5;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #000;
+        }
+        .btn:hover {
+            background: #999;
+        }
+        .link-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #000;
+            cursor: pointer;
+        }
+        
+        /* หน้าแรก */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #d9d9d9;
+            padding: 15px;
+            font-weight: bold;
+        }
+        .banner {
+            width: 100%;
+            height: 150px;
+            background: #d9d9d9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .menu-item {
+            background: #d9d9d9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        /* ป๊อปอัปหน้ารายละเอียดเมนู */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #d9d9d9;
+            width: 90%;
+            max-width: 360px;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        .checkbox-group {
+            margin: 10px 0;
+        }
+
+        /* หน้าตะกร้าและชำระเงิน */
+        .cart-item {
+            background: #d9d9d9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .qr-box {
+            width: 160px;
+            height: 160px;
+            background: #d9d9d9;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- 1. หน้าเข้าสู่ระบบ (IMG_5367) -->
+    <div id="page-login" class="page active">
+        <div class="logo-circle">โลโก้</div>
+        <h2>เข้าสู่ระบบ</h2>
+        <label>ชื่อผู้ใช้/Username</label>
+        <input type="text" placeholder="">
+        <label>รหัสผ่าน/Password</label>
+        <input type="password" placeholder="">
+        <button class="btn" onclick="changePage('page-home')">เข้าสู่ระบบ</button>
+        <div class="link-text" onclick="changePage('page-register')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</div>
+    </div>
+
+    <!-- 2. หน้าสมัครสมาชิก (IMG_5388) -->
+    <div id="page-register" class="page">
+        <div class="logo-circle">โลโก้</div>
+        <h2>สมัครสมาชิก</h2>
+        <label>ชื่อผู้ใช้/Username</label>
+        <input type="text" placeholder="">
+        <label>รหัสผ่าน/Password</label>
+        <input type="password" placeholder="">
+        <label>ยืนยันรหัสผ่าน</label>
+        <input type="password" placeholder="">
+        <button class="btn" onclick="changePage('page-login')">สมัครสมาชิก</button>
+        <div class="link-text" onclick="changePage('page-login')">มีบัญชีอยู่แล้ว? เข้าสู่ระบบ</div>
+    </div>
+
+    <!-- 3. หน้าแรก (IMG_5371) -->
+    <div id="page-home" class="page" style="padding:0;">
+        <div class="header-bar">
+            <span>โลโก้</span>
+            <div>
+                <span style="cursor:pointer; margin-right:10px; background:#bfbfbf; padding:5px 8px;" onclick="changePage('page-status')">สถานะออเดอร์</span>
+                <span style="cursor:pointer; background:#bfbfbf; padding:5px 8px;" onclick="changePage('page-cart')">ตะกร้า</span>
+            </div>
+        </div>
+        <div style="padding: 15px;">
+            <div class="banner">แบนเนอร์เมนูแนะนำ + ปุ่มสั่งเมนู</div>
+            <div class="menu-item" onclick="openModal()"><span>กะเพราหมูกรอบ</span><span>ราคา 60.-</span></div>
+            <div class="menu-item" onclick="openModal()"><span>ข้าวผัดหมู</span><span>ราคา 50.-</span></div>
+            <div class="menu-item" onclick="openModal()"><span>ไข่เจียวหมูสับ</span><span>ราคา 45.-</span></div>
+            <div class="menu-item" onclick="openModal()"><span>ผัดซีอิ๊วหมู</span><span>ราคา 50.-</span></div>
+            <div class="menu-item" onclick="openModal()"><span>ราดหน้าหมูหมัก</span><span>ราคา 50.-</span></div>
+            
+            <label>รีวิว</label>
+            <div style="background:#d9d9d9; padding:10px; margin-bottom:8px; border-radius:4px;">อาหารอร่อยมากครับ</div>
+            <div style="background:#d9d9d9; padding:10px; margin-bottom:8px; border-radius:4px;">ส่งไว รสชาติดี</div>
+            
+            <label>เขียนรีวิว</label>
+            <textarea rows="2" placeholder="พิมพ์รีวิวของคุณ..."></textarea>
+            <button class="btn" style="background:#bfbfbf; margin-top:0;">ส่งรีวิว</button>
+            <button class="btn" style="background:#bfbfbf; margin-top:10px;" onclick="changePage('page-login')">ออกจากระบบ</button>
+        </div>
+    </div>
+
+    <!-- 4. หน้ารายละเอียดเมนู / ป๊อปอัป (IMG_5368) -->
+    <div id="modal-menu" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="margin-top:0;">กะเพราหมูกรอบ</h3>
+            <p>ราคา 60 บาท</p>
+            <label>เลือกระดับความเผ็ด</label>
+            <select style="width:100%; padding:10px; background:#665c54; color:#fff; border:none; border-radius:4px; margin-bottom:10px;">
+                <option>เผ็ดน้อย</option>
+                <option>เผ็ดกลาง</option>
+                <option>เผ็ดมาก</option>
+            </select>
+            <p style="margin:5px 0; font-weight:bold;">เพิ่มไข่พิเศษ +5 บาท</p>
+            <div class="checkbox-group"><input type="checkbox"> เพิ่มไข่ดาว</div>
+            <div class="checkbox-group"><input type="checkbox"> เพิ่มไข่เจียว</div>
+            <label>หมายเหตุเพิ่มเติม</label>
+            <input type="text" placeholder="" style="background:#665c54; color:#fff;">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" style="background:#665c54; color:#fff;" onclick="closeModal(); changePage('page-cart');">ยืนยันใส่ตะกร้า</button>
+                <button class="btn" style="background:#665c54; color:#fff;" onclick="closeModal()">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. หน้าตะกร้าสินค้า (IMG_5364) -->
+    <div id="page-cart" class="page">
+        <div class="header-bar" style="margin:-20px -20px 20px -20px;">
+            <span>ตะกร้าสินค้า</span>
+            <span style="cursor:pointer; background:#665c54; color:#fff; padding:5px 8px;" onclick="changePage('page-home')">กลับหน้าร้าน</span>
+        </div>
+        <div class="cart-item">กะเพราหมูกรอบ (x1) - 65 บาท</div>
+        <div class="cart-item">ไข่ดาว (x1) - 5 บาท</div>
+        <div style="display:flex; justify-content:space-between; font-weight:bold; margin: 20px 0; font-size:18px;">
+            <span>ยอดรวม</span>
+            <span>70 บาท</span>
+        </div>
+        <button class="btn" onclick="changePage('page-status')">ยืนยันคำสั่งซื้อ (ยังไม่ชำระเงิน)</button>
+        <button class="btn" onclick="changePage('page-payment')">ยืนยันคำสั่งซื้อและชำระเงิน</button>
+    </div>
+
+    <!-- 6. หน้าชำระเงิน (IMG_5369) -->
+    <div id="page-payment" class="page">
+        <div class="header-bar" style="margin:-20px -20px 20px -20px;">
+            <span>ตะกร้าสินค้าของคุณ</span>
+            <span style="cursor:pointer; background:#665c54; color:#fff; padding:5px 8px;" onclick="changePage('page-home')">กลับหน้าหลัก</span>
+        </div>
+        <h3 style="text-align: center; margin-top:20px;">สแกน QR Code เพื่อชำระเงิน</h3>
+        <div class="qr-box">QR Code</div>
+        <label>แนบรูปสลิปการโอน</label>
+        <input type="file" style="background:#665c54; color:#fff; padding:10px;">
+        <button class="btn" style="background:#665c54; color:#fff; margin-top:30px;" onclick="changePage('page-status')">ส่งหลักฐานการยืนยันและสั่งออเดอร์</button>
+    </div>
+
+    <!-- 7. หน้าสถานะออเดอร์ (IMG_5365) -->
+    <div id="page-status" class="page">
+        <div class="header-bar" style="margin:-20px -20px 20px -20px;">
+            <span>ติดตามสถานะออเดอร์</span>
+            <span style="cursor:pointer; background:#665c54; color:#fff; padding:5px 8px;" onclick="changePage('page-home')">กลับหน้าร้าน</span>
+        </div>
+        <div style="background:#d9d9d9; padding:15px; border-radius:4px; position:relative; margin-top:10px;">
+            <div style="font-weight:bold;">กะเพราหมูกรอบ(x1)</div>
+            <div style="font-size:14px; margin-top:5px;">ความเผ็ด : เผ็ดกลาง</div>
+            <div style="font-size:14px;">หมายเหตุ : -</div>
+            <div style="margin-top:15px; font-weight:bold;">สถานะ : กำลังรอคิว</div>
+            <div style="position:absolute; top:15px; right:15px; background:#665c54; color:#fff; padding:3px 8px; font-size:12px; border-radius:3px;">ชำระเงินแล้ว</div>
+            <div style="position:absolute; bottom:15px; right:15px; font-weight:bold; font-size:16px;">70 บาท</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ฟังก์ชันสำหรับสลับหน้าจอ
+    function changePage(pageId) {
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    // ฟังก์ชันเปิด/ปิดป๊อปอัปรายละเอียดเมนู
+    function openModal() {
+        document.getElementById('modal-menu').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('modal-menu').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
